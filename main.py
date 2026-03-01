@@ -26,6 +26,10 @@ from auth import (
 # =====================================================
 # FASTAPI APP
 # =====================================================
+# Create tables on startup
+from models import Base
+from database import engine
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Promobridge API",
