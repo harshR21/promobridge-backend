@@ -293,8 +293,38 @@ def create_influencer(
     db.refresh(new_influencer)
     
     return new_influencer
-
 # =====================================================
+# BRAND ROUTES
+# =====================================================
+
+class BrandCreate(BaseModel):
+    brand_name: str
+    industry: Optional[str] = None
+    website: Optional[str] = None
+    description: Optional[str] = None
+
+@app.post("/brands")
+def create_brand(
+    brand_data: BrandCreate,
+    current_user: User = Depends(require_role("brand")),
+    db: Session = Depends(get_db)
+):
+    existing = db.query(Brand).filter(Brand.user_id == current_user.user_id).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Brand profile already exists")
+    new_brand = Brand(
+        user_id=current_user.user_id,
+        brand_name=brand_data.brand_name,
+        industry=brand_data.industry,
+        website=brand_data.website,
+        description=brand_data.description
+    )
+    db.add(new_brand)
+    db.commit()
+    db.refresh(new_brand)
+    return {"brand_id": new_brand.brand_id, "brand_name": new_brand.brand_name}
+# =====================================================
+
 # CAMPAIGN ROUTES
 # =====================================================
 
