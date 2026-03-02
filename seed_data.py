@@ -1,203 +1,189 @@
-from database import SessionLocal
+# seed_data.py
+"""
+Seed database with sample influencer data
+"""
+
 from models import Influencer
 
 def seed_influencers(db):
-
-    influencers = [
-
-        # 🔥 FITNESS
+    """Add sample influencers to database"""
+    
+    influencers_data = [
+        # FITNESS
         {
-            "name": "Virat Kohli",
-            "username": "virat.kohli",
+            "full_name": "Virat Kohli",
+            "handle": "virat.kohli",
             "platform": "instagram",
             "niche": "Fitness",
-            "followers": 266000000,
-            "engagement_rate": 4.7,
-            "estimated_price": 3000000
+            "followers_count": 266000000,
+            "engagement_rate": 4.7
         },
         {
-            "name": "Gaurav Taneja",
-            "username": "flyingbeast",
+            "full_name": "Gaurav Taneja",
+            "handle": "flyingbeast",
             "platform": "youtube",
             "niche": "Fitness",
-            "followers": 9200000,
-            "engagement_rate": 5.4,
-            "estimated_price": 350000
+            "followers_count": 9200000,
+            "engagement_rate": 5.4
         },
         {
-            "name": "Sahil Khan",
-            "username": "sahilkhan",
+            "full_name": "Sahil Khan",
+            "handle": "sahilkhan",
             "platform": "instagram",
             "niche": "Fitness",
-            "followers": 14000000,
-            "engagement_rate": 3.9,
-            "estimated_price": 280000
+            "followers_count": 14000000,
+            "engagement_rate": 3.9
         },
         {
-            "name": "BeerBiceps",
-            "username": "ranveerallahbadia",
+            "full_name": "BeerBiceps",
+            "handle": "ranveerallahbadia",
             "platform": "youtube",
             "niche": "Fitness",
-            "followers": 6100000,
-            "engagement_rate": 4.6,
-            "estimated_price": 200000
+            "followers_count": 6100000,
+            "engagement_rate": 4.6
         },
-
-        # 👗 FASHION
+        
+        # FASHION
         {
-            "name": "Kusha Kapila",
-            "username": "kusha.kapila",
+            "full_name": "Kusha Kapila",
+            "handle": "kusha.kapila",
             "platform": "instagram",
             "niche": "Fashion",
-            "followers": 4300000,
-            "engagement_rate": 5.1,
-            "estimated_price": 150000
+            "followers_count": 4300000,
+            "engagement_rate": 5.1
         },
         {
-            "name": "Komal Pandey",
-            "username": "komalpandeyofficial",
+            "full_name": "Komal Pandey",
+            "handle": "komalpandeyofficial",
             "platform": "instagram",
             "niche": "Fashion",
-            "followers": 1900000,
-            "engagement_rate": 6.4,
-            "estimated_price": 90000
+            "followers_count": 1900000,
+            "engagement_rate": 6.4
         },
         {
-            "name": "Masoom Minawala",
-            "username": "masoomminawala",
+            "full_name": "Masoom Minawala",
+            "handle": "masoomminawala",
             "platform": "instagram",
             "niche": "Fashion",
-            "followers": 1300000,
-            "engagement_rate": 4.2,
-            "estimated_price": 110000
+            "followers_count": 1300000,
+            "engagement_rate": 4.2
         },
         {
-            "name": "Sejal Kumar",
-            "username": "sejalkumar1195",
+            "full_name": "Sejal Kumar",
+            "handle": "sejalkumar1195",
             "platform": "youtube",
             "niche": "Fashion",
-            "followers": 1500000,
-            "engagement_rate": 4.9,
-            "estimated_price": 85000
+            "followers_count": 1500000,
+            "engagement_rate": 4.9
         },
-
-        # 💻 TECH
+        
+        # TECH
         {
-            "name": "Technical Guruji",
-            "username": "technicalguruji",
+            "full_name": "Technical Guruji",
+            "handle": "technicalguruji",
             "platform": "youtube",
             "niche": "Tech",
-            "followers": 23000000,
-            "engagement_rate": 3.8,
-            "estimated_price": 450000
+            "followers_count": 23000000,
+            "engagement_rate": 3.8
         },
         {
-            "name": "GeekyRanjit",
-            "username": "geekyranjit",
+            "full_name": "GeekyRanjit",
+            "handle": "geekyranjit",
             "platform": "youtube",
             "niche": "Tech",
-            "followers": 3400000,
-            "engagement_rate": 4.1,
-            "estimated_price": 160000
+            "followers_count": 3400000,
+            "engagement_rate": 4.1
         },
         {
-            "name": "Tech Burner",
-            "username": "techburner",
+            "full_name": "Tech Burner",
+            "handle": "techburner",
             "platform": "youtube",
             "niche": "Tech",
-            "followers": 12000000,
-            "engagement_rate": 4.5,
-            "estimated_price": 280000
+            "followers_count": 12000000,
+            "engagement_rate": 4.5
         },
         {
-            "name": "Trakin Tech",
-            "username": "trakintech",
+            "full_name": "Trakin Tech",
+            "handle": "trakintech",
             "platform": "youtube",
             "niche": "Tech",
-            "followers": 16000000,
-            "engagement_rate": 3.6,
-            "estimated_price": 300000
+            "followers_count": 16000000,
+            "engagement_rate": 3.6
         },
-
-        # 🍔 FOOD
+        
+        # FOOD
         {
-            "name": "Kabita Singh",
-            "username": "kabitaskitchen",
+            "full_name": "Kabita Singh",
+            "handle": "kabitaskitchen",
             "platform": "youtube",
             "niche": "Food",
-            "followers": 14000000,
-            "engagement_rate": 5.2,
-            "estimated_price": 250000
+            "followers_count": 14000000,
+            "engagement_rate": 5.2
         },
         {
-            "name": "Nisha Madhulika",
-            "username": "nishamadhulika",
+            "full_name": "Nisha Madhulika",
+            "handle": "nishamadhulika",
             "platform": "youtube",
             "niche": "Food",
-            "followers": 15000000,
-            "engagement_rate": 4.9,
-            "estimated_price": 270000
+            "followers_count": 15000000,
+            "engagement_rate": 4.9
         },
         {
-            "name": "Sanjeev Kapoor",
-            "username": "sanjeevkapoor",
+            "full_name": "Sanjeev Kapoor",
+            "handle": "sanjeevkapoor",
             "platform": "instagram",
             "niche": "Food",
-            "followers": 5600000,
-            "engagement_rate": 3.8,
-            "estimated_price": 180000
+            "followers_count": 5600000,
+            "engagement_rate": 3.8
         },
         {
-            "name": "Shivesh Bhatia",
-            "username": "bakewithshivesh",
+            "full_name": "Shivesh Bhatia",
+            "handle": "bakewithshivesh",
             "platform": "instagram",
             "niche": "Food",
-            "followers": 2300000,
-            "engagement_rate": 5.6,
-            "estimated_price": 120000
+            "followers_count": 2300000,
+            "engagement_rate": 5.6
         },
-
-        # ✈️ TRAVEL
+        
+        # TRAVEL
         {
-            "name": "Mumbiker Nikhil",
-            "username": "mumbiker_nikhil",
+            "full_name": "Mumbiker Nikhil",
+            "handle": "mumbiker_nikhil",
             "platform": "youtube",
             "niche": "Travel",
-            "followers": 4100000,
-            "engagement_rate": 4.3,
-            "estimated_price": 190000
+            "followers_count": 4100000,
+            "engagement_rate": 4.3
         },
         {
-            "name": "Passenger Paramvir",
-            "username": "passengerparamvir",
+            "full_name": "Passenger Paramvir",
+            "handle": "passengerparamvir",
             "platform": "youtube",
             "niche": "Travel",
-            "followers": 1900000,
-            "engagement_rate": 5.1,
-            "estimated_price": 110000
+            "followers_count": 1900000,
+            "engagement_rate": 5.1
         },
         {
-            "name": "Kritika Goel",
-            "username": "kritika_goel",
+            "full_name": "Kritika Goel",
+            "handle": "kritika_goel",
             "platform": "instagram",
             "niche": "Travel",
-            "followers": 1200000,
-            "engagement_rate": 4.8,
-            "estimated_price": 95000
+            "followers_count": 1200000,
+            "engagement_rate": 4.8
         },
         {
-            "name": "Savi & Vid",
-            "username": "saviandvid",
+            "full_name": "Savi & Vid",
+            "handle": "saviandvid",
             "platform": "instagram",
             "niche": "Travel",
-            "followers": 900000,
-            "engagement_rate": 6.2,
-            "estimated_price": 80000
-        },
+            "followers_count": 900000,
+            "engagement_rate": 6.2
+        }
     ]
-
-    for inf in influencers:
-        db.add(Influencer(**inf))
-
+    
+    # Add influencers to database
+    for data in influencers_data:
+        influencer = Influencer(**data)
+        db.add(influencer)
+    
     db.commit()
-    db.close()
+    print(f"✅ Added {len(influencers_data)} influencers to database")
