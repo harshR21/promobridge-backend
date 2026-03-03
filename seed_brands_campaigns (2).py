@@ -13,8 +13,11 @@ def register(email, password, role):
     return r.status_code == 200
 
 def login(email, password):
+    # Fix: use form-encoded data with proper content-type
     r = requests.post(f"{BASE_URL}/auth/login",
-        data={"username": email, "password": password}, timeout=30)
+        data={"username": email, "password": password},
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        timeout=30)
     if r.status_code == 200:
         return r.json().get("access_token")
     return None
@@ -68,7 +71,7 @@ campaigns_data = [
     ]),
     ("trav1@pb.com","Trav@001",[
         {"title":"MakeMyTrip Summer Holidays",     "niche":"Travel",  "platform":"youtube",   "budget":700000, "min_followers":300000, "description":"Travel vloggers showcase holiday packages and flight deals across India."},
-        {"title":"Hidden Gems of India Series",   "niche":"Travel",  "platform":"instagram", "budget":350000, "min_followers":100000, "description":"Instagram travel series featuring unexplored Indian destinations."},
+        {"title":"Hidden Gems of India Series",    "niche":"Travel",  "platform":"instagram", "budget":350000, "min_followers":100000, "description":"Instagram travel series featuring unexplored Indian destinations."},
     ]),
 ]
 
@@ -97,21 +100,20 @@ c_success = 0
 for email, pwd, camps in campaigns_data:
     token = brand_tokens.get(email) or login(email, pwd)
     if not token:
+        print(f"  ❌ Could not login: {email}")
         continue
     for camp in camps:
         r = requests.post(f"{BASE_URL}/campaigns",
             json=camp,
-            headers={"Authorization": f"Bearer {token}"}, timeout=30)
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            timeout=30)
         if r.status_code == 200:
             c_success += 1
             budget = camp['budget']
-            if budget >= 100000:
-                budget_str = f"₹{budget//100000} Lakh"
-            else:
-                budget_str = f"₹{budget:,}"
+            budget_str = f"₹{budget//100000} Lakh" if budget >= 100000 else f"₹{budget:,}"
             print(f"  ✅ [{c_success}] {camp['title']} — {budget_str}")
         else:
-            print(f"  ⚠️  {camp['title']}: {r.text[:60]}")
+            print(f"  ❌ {camp['title']}: {r.status_code} — {r.text[:80]}")
 
 # Final stats
 print("\n📊 Final Stats:")
