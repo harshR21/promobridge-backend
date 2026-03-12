@@ -50,21 +50,21 @@ app.add_middleware(
 
 @app.on_event("startup")
 def on_startup():
-    print("🚀 Promobridge starting...")
+    print("Promobridge starting...")
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created")
+    print("Database tables created")
     test_connection()
     db = SessionLocal()
     try:
         count = db.query(Influencer).count()
         if count == 0:
-            print("🌱 Seeding influencers...")
+            print("Seeding influencers...")
             seed_influencers(db)
-            print(f"✅ Added {db.query(Influencer).count()} influencers")
+            print(f"Added {db.query(Influencer).count()} influencers")
         else:
-            print(f"ℹ️  Database already has {count} influencers")
+            print(f"Database already has {count} influencers")
     except Exception as e:
-        print(f"⚠️  Seeding error: {e}")
+        print(f"Seeding error: {e}")
     finally:
         db.close()
 
@@ -271,7 +271,7 @@ def get_brands(db: Session = Depends(get_db)):
     return [{"brand_id": b.brand_id, "brand_name": b.brand_name, "industry": b.industry, "website": b.website, "description": b.description} for b in brands]
 
 # =====================================================
-# CAMPAIGNS
+# CAMPAIGNS  <- BUG FIXED: user_id replaced with brand_id
 # =====================================================
 
 @app.post("/campaigns", response_model=CampaignResponse)
@@ -280,8 +280,13 @@ def create_campaign(
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
+    # Get the brand profile linked to this logged-in user
+    brand = db.query(Brand).filter(Brand.user_id == current_user.user_id).first()
+    if not brand:
+        raise HTTPException(status_code=400, detail="Brand profile not found. Create brand first.")
+
     new_campaign = Campaign(
-        user_id=current_user.user_id,
+        brand_id=brand.brand_id,          # FIXED: was user_id before
         title=data.title,
         description=data.description,
         niche=data.niche,
